@@ -30,8 +30,8 @@ def getPath(start, end):
             if nodes[str(tmp)][1] + getDistance(tmp, end) < nodes[str(current)][1] + getDistance(current, end):
                 current = tmp
         x, y = current
-        toastCanvas.create_rectangle(x*CELL_SIZE, y*CELL_SIZE, (x+1)*CELL_SIZE, (y+1)*CELL_SIZE, fill='yellow')
-        toastCanvas.create_rectangle(x1*CELL_SIZE, y1*CELL_SIZE, (x1+1)*CELL_SIZE, (y1+1)*CELL_SIZE, fill='green')
+        grid.create_rectangle(x*CELL_SIZE, y*CELL_SIZE, (x+1)*CELL_SIZE, (y+1)*CELL_SIZE, fill='yellow')
+        grid.create_rectangle(x1*CELL_SIZE, y1*CELL_SIZE, (x1+1)*CELL_SIZE, (y1+1)*CELL_SIZE, fill='green')
         if current == end:
             break
 
@@ -51,7 +51,7 @@ def getPath(start, end):
         root.update()
         
         time.sleep(TIME)
-        toastCanvas.create_rectangle(x*CELL_SIZE, y*CELL_SIZE, (x+1)*CELL_SIZE, (y+1)*CELL_SIZE, fill='#bbbbdd')
+        grid.create_rectangle(x*CELL_SIZE, y*CELL_SIZE, (x+1)*CELL_SIZE, (y+1)*CELL_SIZE, fill='#bbbbdd')
 
     if current != end: # if the path does not exist
         return -1
@@ -66,13 +66,13 @@ def getPath(start, end):
 
 def refreshMap():
     global CELL_SIZE
-    toastCanvas.delete(ALL)
+    grid.delete(ALL)
     for x in range(16):
-        toastCanvas.create_line(0, x*CELL_SIZE, 16*CELL_SIZE, x*CELL_SIZE)
-        toastCanvas.create_line(x*CELL_SIZE, 0, x*CELL_SIZE, 16*CELL_SIZE)
+        grid.create_line(0, x*CELL_SIZE, 16*CELL_SIZE, x*CELL_SIZE)
+        grid.create_line(x*CELL_SIZE, 0, x*CELL_SIZE, 16*CELL_SIZE)
     for obstacle in OBSTACLES:
         x, y = obstacle
-        toastCanvas.create_rectangle(x*CELL_SIZE, y*CELL_SIZE, (x+1)*CELL_SIZE, (y+1)*CELL_SIZE, fill='black')
+        grid.create_rectangle(x*CELL_SIZE, y*CELL_SIZE, (x+1)*CELL_SIZE, (y+1)*CELL_SIZE, fill='black')
 
 def create_path():
     startButton.config(state = DISABLED)
@@ -89,32 +89,32 @@ def create_path():
     x1, y1 = pos1
     x2, y2 = pos2
 
-    toastCanvas.create_rectangle(x1*CELL_SIZE, y1*CELL_SIZE, (x1+1)*CELL_SIZE, (y1+1)*CELL_SIZE, fill='green')
-    toastCanvas.create_rectangle(x2*CELL_SIZE, y2*CELL_SIZE, (x2+1)*CELL_SIZE, (y2+1)*CELL_SIZE, fill='red')
+    grid.create_rectangle(x1*CELL_SIZE, y1*CELL_SIZE, (x1+1)*CELL_SIZE, (y1+1)*CELL_SIZE, fill='green')
+    grid.create_rectangle(x2*CELL_SIZE, y2*CELL_SIZE, (x2+1)*CELL_SIZE, (y2+1)*CELL_SIZE, fill='red')
     root.update()
     time.sleep(TIME)
     path = getPath(pos1, pos2)
     if path != -1:
         for cell in path:
             x, y = cell
-            toastCanvas.create_rectangle(x*CELL_SIZE, y*CELL_SIZE, (x+1)*CELL_SIZE, (y+1)*CELL_SIZE, fill='blue')
+            grid.create_rectangle(x*CELL_SIZE, y*CELL_SIZE, (x+1)*CELL_SIZE, (y+1)*CELL_SIZE, fill='blue')
     else:
         print("NO PATH")
-    toastCanvas.create_rectangle(x2*CELL_SIZE, y2*CELL_SIZE, (x2+1)*CELL_SIZE, (y2+1)*CELL_SIZE, fill='red')
+    grid.create_rectangle(x2*CELL_SIZE, y2*CELL_SIZE, (x2+1)*CELL_SIZE, (y2+1)*CELL_SIZE, fill='red')
     
     startButton.config(state = NORMAL)
 
-toastCanvas = Canvas(root, width = 16*CELL_SIZE, height = 16*CELL_SIZE, bg = 'white')
-toastCanvas.pack()
+grid = Canvas(root, width = 16*CELL_SIZE, height = 16*CELL_SIZE, bg = 'white')
+grid.pack()
 OBSTACLES = []
 for x in range(16):
-    toastCanvas.create_line(0, x*CELL_SIZE, 16*CELL_SIZE, x*CELL_SIZE)
-    toastCanvas.create_line(x*CELL_SIZE, 0, x*CELL_SIZE, 16*CELL_SIZE)
+    grid.create_line(0, x*CELL_SIZE, 16*CELL_SIZE, x*CELL_SIZE)
+    grid.create_line(x*CELL_SIZE, 0, x*CELL_SIZE, 16*CELL_SIZE)
 
 for i in range(NUMBER_OF_OBSTACLES):
     x, y = random.randint(0, 15), random.randint(0, 15)
     OBSTACLES.append([x, y])
-    toastCanvas.create_rectangle(x*CELL_SIZE, y*CELL_SIZE, (x+1)*CELL_SIZE, (y+1)*CELL_SIZE, fill='black')
+    grid.create_rectangle(x*CELL_SIZE, y*CELL_SIZE, (x+1)*CELL_SIZE, (y+1)*CELL_SIZE, fill='black')
     
 startButton = Button(root, text = 'start', command = create_path)
 startButton.pack()
