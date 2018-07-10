@@ -2,12 +2,13 @@ def getDistance(pos1, pos2):
     """Returns the Manhattan distance between pos1 and pos2"""
     return abs(pos1[0]-pos2[0])+abs(pos1[1]-pos2[1])
 
+
 def getPath(start, end, OBSTACLES):
     """Returns a path between start and end, if it exists"""
     if start == end:
         return -1
     openList = [start]
-    nodes = {start : ['',0]} # nodes['[x, y]'] = [parent, distance from the start]
+    nodes = {start : ['',0]} # nodes[(x, y)] = [parent, distance from the start]
     closedList = []
     x1, y1 = start
     while openList:
@@ -19,7 +20,7 @@ def getPath(start, end, OBSTACLES):
         if current == end:
             break
 
-        del openList[openList.index(current)]
+        openList.remove(current)
         closedList.append(current)
         
         for a,b in [(0,1), (0,-1), (1,0), (-1,0)]:
