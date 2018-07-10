@@ -47,9 +47,11 @@ def create_path():
         for cell in path[:-1]:
             x, y = cell
             grid.create_rectangle(x*CELL_SIZE, y*CELL_SIZE, (x+1)*CELL_SIZE, (y+1)*CELL_SIZE, fill='blue')
+        percentage = round(len(path)*100/len(debug), 3)
     else:
         print("NO PATH")
-    print("(" + str(len(debug)) + " cells analyzed)")
+        percentage = 0
+    print(str(len(debug)) + " cells analyzed (" + str(percentage) + "%)")
     startButton.config(state=NORMAL)
 
 root = Tk()
