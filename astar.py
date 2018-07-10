@@ -1,13 +1,3 @@
-from tkinter import *
-import random
-import time
-
-TIME = 0.05
-
-CELL_SIZE = 40
-
-NUMBER_OF_OBSTACLES = 90
-
 def getDistance(pos1, pos2):
     """Returns the Manhattan distance between pos1 and pos2"""
     return abs(pos1[0]-pos2[0])+abs(pos1[1]-pos2[1])
@@ -26,8 +16,6 @@ def getPath(start, end, OBSTACLES):
             if nodes[tmp][1] + getDistance(tmp, end) < nodes[current][1] + getDistance(current, end):
                 current = tmp
         x, y = current
-        #grid.create_rectangle(x*CELL_SIZE, y*CELL_SIZE, (x+1)*CELL_SIZE, (y+1)*CELL_SIZE, fill='yellow')
-        #grid.create_rectangle(x1*CELL_SIZE, y1*CELL_SIZE, (x1+1)*CELL_SIZE, (y1+1)*CELL_SIZE, fill='green')
         if current == end:
             break
 
@@ -44,11 +32,7 @@ def getPath(start, end, OBSTACLES):
                 nodes[(X,Y)] = [current, nodes[current][1] + 1]
             elif not (X,Y) in nodes or nodes[(X,Y)][1] > nodes[current][1] + 1:
                 nodes[(X,Y)] = [current, nodes[current][1] + 1]
-        #root.update()
         
-        #time.sleep(TIME)
-        #grid.create_rectangle(x*CELL_SIZE, y*CELL_SIZE, (x+1)*CELL_SIZE, (y+1)*CELL_SIZE, fill='#bbbbdd')
-
     if current != end: # if the path does not exist
         return -1, closedList
 
@@ -58,62 +42,3 @@ def getPath(start, end, OBSTACLES):
         path.append(tmp)
         tmp = nodes[tmp][0]
     return path[::-1], closedList
-
-def refreshMap():
-    global CELL_SIZE
-    grid.delete(ALL)
-    for x in range(16):
-        grid.create_line(0, x*CELL_SIZE, 16*CELL_SIZE, x*CELL_SIZE)
-        grid.create_line(x*CELL_SIZE, 0, x*CELL_SIZE, 16*CELL_SIZE)
-    for obstacle in OBSTACLES:
-        x, y = obstacle
-        grid.create_rectangle(x*CELL_SIZE, y*CELL_SIZE, (x+1)*CELL_SIZE, (y+1)*CELL_SIZE, fill='black')
-
-def create_path():
-    startButton.config(state = DISABLED)
-    global CELL_SIZE
-    refreshMap()
-    pos1 = (random.randint(0,15), random.randint(0,15))
-    while pos1 in OBSTACLES:
-        pos1 = (random.randint(0,15), random.randint(0,15))
-    pos2 = pos1
-    while pos2 == pos1 or pos2 in OBSTACLES:
-        pos2 = (random.randint(0,15), random.randint(0,15))
-
-    print("path between", pos1, pos2, "length : ", end = "")
-    x1, y1 = pos1
-    x2, y2 = pos2
-
-    grid.create_rectangle(x1*CELL_SIZE, y1*CELL_SIZE, (x1+1)*CELL_SIZE, (y1+1)*CELL_SIZE, fill='green')
-    grid.create_rectangle(x2*CELL_SIZE, y2*CELL_SIZE, (x2+1)*CELL_SIZE, (y2+1)*CELL_SIZE, fill='red')
-    root.update()
-    time.sleep(TIME)
-    path, debug = getPath(pos1, pos2, OBSTACLES)
-    if path != -1:
-        print(len(path))
-        for cell in path:
-            x, y = cell
-            grid.create_rectangle(x*CELL_SIZE, y*CELL_SIZE, (x+1)*CELL_SIZE, (y+1)*CELL_SIZE, fill='blue')
-    else:
-        print("NO PATH")
-    grid.create_rectangle(x2*CELL_SIZE, y2*CELL_SIZE, (x2+1)*CELL_SIZE, (y2+1)*CELL_SIZE, fill='red')
-    startButton.config(state=NORMAL)
-
-if __name__ == "__main__":
-
-    root = Tk()
-    grid = Canvas(root, width = 16*CELL_SIZE, height = 16*CELL_SIZE, bg = 'white')
-    grid.pack()
-    OBSTACLES = []
-    for x in range(16):
-        grid.create_line(0, x*CELL_SIZE, 16*CELL_SIZE, x*CELL_SIZE)
-        grid.create_line(x*CELL_SIZE, 0, x*CELL_SIZE, 16*CELL_SIZE)
-
-    for i in range(NUMBER_OF_OBSTACLES):
-        x, y = random.randint(0, 15), random.randint(0, 15)
-        OBSTACLES.append((x, y))
-        grid.create_rectangle(x*CELL_SIZE, y*CELL_SIZE, (x+1)*CELL_SIZE, (y+1)*CELL_SIZE, fill='black')
-        
-    startButton = Button(root, text = 'start', command = create_path)
-    startButton.pack()
-    root.mainloop()
