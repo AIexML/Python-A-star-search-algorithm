@@ -18,7 +18,7 @@ def refreshMap():
         grid.create_rectangle(x*CELL_SIZE, y*CELL_SIZE, (x+1)*CELL_SIZE, (y+1)*CELL_SIZE, fill='black')
 
 def create_path():
-    startButton.config(state = DISABLED)
+    startButton.config(state=DISABLED)
     global CELL_SIZE
     refreshMap()
     pos1 = (random.randint(0,15), random.randint(0,15))
@@ -28,7 +28,7 @@ def create_path():
     while pos2 == pos1 or pos2 in OBSTACLES:
         pos2 = (random.randint(0,15), random.randint(0,15))
 
-    print("path between", pos1, pos2, "length : ", end = "")
+    print("path between", pos1, pos2, "length : ", end="")
     x1, y1 = pos1
     x2, y2 = pos2
 
@@ -42,19 +42,17 @@ def create_path():
         root.update()
         time.sleep(TIME)
         grid.create_rectangle(x*CELL_SIZE, y*CELL_SIZE, (x+1)*CELL_SIZE, (y+1)*CELL_SIZE, fill='#bbbbdd')
-        root.update()
     if path != -1:
         print(len(path))
-        for cell in path:
+        for cell in path[:-1]:
             x, y = cell
             grid.create_rectangle(x*CELL_SIZE, y*CELL_SIZE, (x+1)*CELL_SIZE, (y+1)*CELL_SIZE, fill='blue')
     else:
         print("NO PATH")
-    grid.create_rectangle(x2*CELL_SIZE, y2*CELL_SIZE, (x2+1)*CELL_SIZE, (y2+1)*CELL_SIZE, fill='red')
     startButton.config(state=NORMAL)
 
 root = Tk()
-grid = Canvas(root, width = 16*CELL_SIZE, height = 16*CELL_SIZE, bg = 'white')
+grid = Canvas(root, width=16*CELL_SIZE, height=16*CELL_SIZE, bg='white')
 grid.pack()
 OBSTACLES = []
 for x in range(16):
@@ -66,6 +64,6 @@ for i in range(NUMBER_OF_OBSTACLES):
     OBSTACLES.append((x, y))
     grid.create_rectangle(x*CELL_SIZE, y*CELL_SIZE, (x+1)*CELL_SIZE, (y+1)*CELL_SIZE, fill='black')
 
-startButton = Button(root, text = 'start', command = create_path)
+startButton = Button(root, text='start', command=create_path)
 startButton.pack()
 root.mainloop()
