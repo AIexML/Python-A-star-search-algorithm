@@ -49,6 +49,7 @@ def create_path():
             grid.create_rectangle(x*CELL_SIZE, y*CELL_SIZE, (x+1)*CELL_SIZE, (y+1)*CELL_SIZE, fill='blue')
     else:
         print("NO PATH")
+    print("(" + str(len(debug)) + " cells analyzed)")
     startButton.config(state=NORMAL)
 
 root = Tk()
