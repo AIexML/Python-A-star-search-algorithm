@@ -5,9 +5,9 @@ from astar import *
 
 
 TIME = 0.05
-CELL_SIZE = 20
-NUMBER_OF_OBSTACLES = 150
-SIZE = 32
+CELL_SIZE = 40
+NUMBER_OF_OBSTACLES = 90
+SIZE = 16
 
 
 def refresh_map():
@@ -39,14 +39,17 @@ def create_path():
     grid.create_rectangle(x1*CELL_SIZE, y1*CELL_SIZE, (x1+1)*CELL_SIZE, (y1+1)*CELL_SIZE, fill='green')
     grid.create_rectangle(x2*CELL_SIZE, y2*CELL_SIZE, (x2+1)*CELL_SIZE, (y2+1)*CELL_SIZE, fill='red')
     root.update()
+    
     path, debug = get_path(pos1, pos2, OBSTACLES, SIZE)
+    
     for cell in debug[1:]:
         x, y = cell
         grid.create_rectangle(x*CELL_SIZE, y*CELL_SIZE, (x+1)*CELL_SIZE, (y+1)*CELL_SIZE, fill='yellow')
         root.update()
         time.sleep(TIME)
         grid.create_rectangle(x*CELL_SIZE, y*CELL_SIZE, (x+1)*CELL_SIZE, (y+1)*CELL_SIZE, fill='#bbbbdd')
-    if path != -1:
+        
+    if path:
         print("    length :", len(path))
         for cell in path[:-1]:
             x, y = cell

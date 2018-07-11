@@ -6,7 +6,7 @@ def get_distance(pos1, pos2):
 def get_path(start, end, OBSTACLES, SIZE):
     """Returns a path between start and end, if it exists"""
     if start == end:
-        return -1
+        return None, []
     openList = [start]
     nodes = {start: ['',0]}  # nodes[(x, y)] = [parent, distance from the start]
     closedList = []
@@ -35,11 +35,11 @@ def get_path(start, end, OBSTACLES, SIZE):
                 nodes[(X, Y)] = [current, nodes[current][1] + 1]
         
     if current != end:  # if the path does not exist
-        return -1, closedList
+        return None, closedList
 
     tmp = nodes[end][0]
     path = [end]
     while tmp != start:  # rewind the parents of the nodes to get the path
-        path.append(tmp)
+        path = [tmp] + path
         tmp = nodes[tmp][0]
-    return path[::-1], closedList
+    return path, closedList
