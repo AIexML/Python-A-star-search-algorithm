@@ -3,7 +3,7 @@ def get_distance(pos1, pos2):
     return abs(pos1[0]-pos2[0])+abs(pos1[1]-pos2[1])
 
 
-def get_path(start, end, OBSTACLES):
+def get_path(start, end, OBSTACLES, SIZE):
     """Returns a path between start and end, if it exists"""
     if start == end:
         return -1
@@ -26,7 +26,7 @@ def get_path(start, end, OBSTACLES):
         for a, b in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
             X = current[0] + a
             Y = current[1] + b
-            if (X, Y) in OBSTACLES or (X, Y) in closedList or X < 0 or X > 15 or Y < 0 or Y > 15:
+            if (X, Y) in OBSTACLES or (X, Y) in closedList or X < 0 or X >= SIZE or Y < 0 or Y >= SIZE:
                 continue
             elif not (X, Y) in openList:
                 openList.append((X, Y))
