@@ -3,11 +3,13 @@ import random
 import time
 from astar import *
 
+
 TIME = 0.05
 CELL_SIZE = 40
 NUMBER_OF_OBSTACLES = 90
 
-def refreshMap():
+
+def refresh_map():
     global CELL_SIZE
     grid.delete(ALL)
     for x in range(16):
@@ -17,16 +19,17 @@ def refreshMap():
         x, y = obstacle
         grid.create_rectangle(x*CELL_SIZE, y*CELL_SIZE, (x+1)*CELL_SIZE, (y+1)*CELL_SIZE, fill='black')
 
+
 def create_path():
-    startButton.config(state=DISABLED)
     global CELL_SIZE
-    refreshMap()
-    pos1 = (random.randint(0,15), random.randint(0,15))
+    startButton.config(state=DISABLED)
+    refresh_map()
+    pos1 = (random.randint(0, 15), random.randint(0, 15))
     while pos1 in OBSTACLES:
-        pos1 = (random.randint(0,15), random.randint(0,15))
+        pos1 = (random.randint(0, 15), random.randint(0, 15))
     pos2 = pos1
     while pos2 == pos1 or pos2 in OBSTACLES:
-        pos2 = (random.randint(0,15), random.randint(0,15))
+        pos2 = (random.randint(0, 15), random.randint(0, 15))
 
     print("path between", pos1, pos2, "length : ", end="")
     x1, y1 = pos1
@@ -35,7 +38,7 @@ def create_path():
     grid.create_rectangle(x1*CELL_SIZE, y1*CELL_SIZE, (x1+1)*CELL_SIZE, (y1+1)*CELL_SIZE, fill='green')
     grid.create_rectangle(x2*CELL_SIZE, y2*CELL_SIZE, (x2+1)*CELL_SIZE, (y2+1)*CELL_SIZE, fill='red')
     root.update()
-    path, debug = getPath(pos1, pos2, OBSTACLES)
+    path, debug = get_path(pos1, pos2, OBSTACLES)
     for cell in debug[1:]:
         x, y = cell
         grid.create_rectangle(x*CELL_SIZE, y*CELL_SIZE, (x+1)*CELL_SIZE, (y+1)*CELL_SIZE, fill='yellow')
@@ -53,6 +56,7 @@ def create_path():
         percentage = 0
     print(str(len(debug)) + " cells analyzed (" + str(percentage) + "%)")
     startButton.config(state=NORMAL)
+
 
 root = Tk()
 grid = Canvas(root, width=16*CELL_SIZE, height=16*CELL_SIZE, bg='white')
