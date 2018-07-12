@@ -4,7 +4,7 @@ def get_distance(pos1, pos2):
 
 
 def get_path(start, end, OBSTACLES, SIZE):
-    """Returns a path between start and end, if it exists"""
+    """Returns a path between start and end if it exists and a list of cells analzyed"""
     if start == end:
         return None, []
     openList = [start]
