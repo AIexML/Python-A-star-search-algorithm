@@ -58,7 +58,7 @@ def create_path():
     else:
         print("    length : no path")
         percentage = 0
-    print("    " + str(len(debug)) + " cells analyzed (" + str(percentage) + "%)\n")
+    print("    {0} cells analyzed ({1}%)\n".format(len(debug), percentage))
     startButton.config(state=NORMAL)
 
 
