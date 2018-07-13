@@ -146,7 +146,7 @@ grid_frame = Frame(root)
 grid_frame.grid(row=0, column=0)
 
 button_frame = Frame(root)
-button_frame.grid(row=0, column=1)
+button_frame.grid(row=1, column=0)
 
 grid = Canvas(grid_frame, width=SIZE*CELL_SIZE, height=SIZE*CELL_SIZE, bg='white')
 grid.bind("<Button-1>", click)
@@ -161,10 +161,16 @@ for i in range(NUMBER_OF_OBSTACLES):
     obstacles.append((x, y))
     grid.create_rectangle(x*CELL_SIZE, y*CELL_SIZE, (x+1)*CELL_SIZE, (y+1)*CELL_SIZE, fill='black')
 
-start_button = Button(button_frame, width=15, height=5, text='start', command=create_path)
-start_button.pack()
+frame_start_button = Frame(button_frame, width=SIZE*CELL_SIZE//2, height=100)
+frame_start_button.propagate(False)
+frame_start_button.grid(row=0, column=0)
+start_button = Button(frame_start_button, text='start', command=create_path)
+start_button.pack(expand=True, fill=BOTH)
 
-custom_button = Button(button_frame, width=15, height=5, text='set the obstacles', command=lambda:custom(STATE_OBSTACLE))
-custom_button.pack()
+frame_custom_button = Frame(button_frame, width=SIZE*CELL_SIZE//2, height=100)
+frame_custom_button.propagate(False)
+frame_custom_button.grid(row=0, column=1)
+custom_button = Button(frame_custom_button, text='set the obstacles', command=lambda:custom(STATE_OBSTACLE))
+custom_button.pack(expand=True, fill=BOTH)
 
 root.mainloop()
