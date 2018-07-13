@@ -4,23 +4,34 @@ import time
 from astar import *
 
 
+#  CONSTANTS
 TIME = 0.05
 CELL_SIZE = 40
 NUMBER_OF_OBSTACLES = 90
 SIZE = 16
 
-
 STATE_OBSTACLE = 0
 STATE_START = 1
 STATE_END = 2
 
+
+#  GLOBALS
+obstacles = []
+current_state = None
+start = None
+end = None
+
+
 def refresh_map():
     global CELL_SIZE, SIZE, start, end
+    
     grid.delete(ALL)
+    
     for x in range(SIZE):
         grid.create_line(0, x*CELL_SIZE, SIZE*CELL_SIZE, x*CELL_SIZE)
         grid.create_line(x*CELL_SIZE, 0, x*CELL_SIZE, SIZE*CELL_SIZE)
-    for obstacle in OBSTACLES:
+        
+    for obstacle in obstacles:
         x, y = obstacle
         grid.create_rectangle(x*CELL_SIZE, y*CELL_SIZE, (x+1)*CELL_SIZE, (y+1)*CELL_SIZE, fill='black')
 
@@ -35,6 +46,7 @@ def refresh_map():
 
 def create_path():
     global CELL_SIZE, SIZE, start, end
+    
     startButton.config(state=DISABLED)
     customButton.config(state=DISABLED)
     refresh_map()
@@ -50,7 +62,7 @@ def create_path():
     grid.create_rectangle(x2*CELL_SIZE, y2*CELL_SIZE, (x2+1)*CELL_SIZE, (y2+1)*CELL_SIZE, fill='red')
     root.update()
     
-    path, debug = get_path(start, end, OBSTACLES, SIZE)
+    path, debug = get_path(start, end, obstacles, SIZE)
     
     for cell in debug[1:]:
         x, y = cell
@@ -76,14 +88,13 @@ def create_path():
 
 
 def custom(state):
-    global OBSTACLES, current_state
+    global obstacles, current_state
     
     if state == STATE_OBSTACLE:
         startButton.config(state=DISABLED)
         current_state = STATE_OBSTACLE
         customButton.config(text="place start", command=lambda:custom(STATE_START))
         refresh_map()
-        print("place obstacles")
         
     elif state == STATE_START:
         current_state = STATE_START
@@ -95,22 +106,24 @@ def custom(state):
     
 
 def click(event):
-    global OBSTACLES, current_state, start, end
+    global obstacles, current_state, start, end
+    
     x, y = event.x//CELL_SIZE, event.y//CELL_SIZE
+    
     if current_state == STATE_OBSTACLE:
-        if (x, y) in OBSTACLES:
-            OBSTACLES.remove((x, y))
+        if (x, y) in obstacles:
+            obstacles.remove((x, y))
         else:
-            OBSTACLES.append((x, y))
+            obstacles.append((x, y))
         refresh_map()
         
     elif current_state == STATE_START:
-        if (x, y) not in OBSTACLES:
+        if (x, y) not in obstacles:
             start = (x, y)
             refresh_map()
 
     elif current_state == STATE_END:
-        if (x, y) not in OBSTACLES and (x, y) != start:
+        if (x, y) not in obstacles and (x, y) != start:
             end = (x, y)
             refresh_map()
             startButton.config(state=NORMAL)
@@ -119,31 +132,26 @@ def click(event):
 def get_random_positions():
     global start, end
     start = (random.randint(0, SIZE-1), random.randint(0, SIZE-1))
-    while start in OBSTACLES:
+    while start in obstacles:
         start = (random.randint(0, SIZE-1), random.randint(0, SIZE-1))
     end = start
-    while end == start or end in OBSTACLES:
+    while end == start or end in obstacles:
         end = (random.randint(0, SIZE-1), random.randint(0, SIZE-1))
-    
 
-current_state = None
-start = None
-end = None
 
 root = Tk()
 grid = Canvas(root, width=SIZE*CELL_SIZE, height=SIZE*CELL_SIZE, bg='white')
 grid.bind("<Button-1>", click)
 grid.pack()
-OBSTACLES = []
+
 for x in range(SIZE):
     grid.create_line(0, x*CELL_SIZE, SIZE*CELL_SIZE, x*CELL_SIZE)
     grid.create_line(x*CELL_SIZE, 0, x*CELL_SIZE, SIZE*CELL_SIZE)
 
 for i in range(NUMBER_OF_OBSTACLES):
     x, y = random.randint(0, SIZE-1), random.randint(0, SIZE-1)
-    OBSTACLES.append((x, y))
+    obstacles.append((x, y))
     grid.create_rectangle(x*CELL_SIZE, y*CELL_SIZE, (x+1)*CELL_SIZE, (y+1)*CELL_SIZE, fill='black')
-
 
 startButton = Button(root, text='start', command=create_path)
 startButton.pack()
