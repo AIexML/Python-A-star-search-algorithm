@@ -93,16 +93,16 @@ def custom(state):
     if state == STATE_OBSTACLE:
         start_button.config(state=DISABLED)
         current_state = STATE_OBSTACLE
-        custom_button.config(text="place start", command=lambda:custom(STATE_START))
+        custom_button.config(text="set the start", command=lambda:custom(STATE_START))
         refresh_map()
         
     elif state == STATE_START:
         current_state = STATE_START
-        custom_button.config(text="place end", command=lambda:custom(STATE_END))
+        custom_button.config(text="set the end", command=lambda:custom(STATE_END))
         
     elif state == STATE_END:
         current_state = STATE_END
-        custom_button.config(text="place obstacles", command=lambda:custom(STATE_OBSTACLE))
+        custom_button.config(text="set the obstacles", command=lambda:custom(STATE_OBSTACLE))
     
 
 def click(event):
@@ -164,7 +164,7 @@ for i in range(NUMBER_OF_OBSTACLES):
 start_button = Button(button_frame, width=15, height=5, text='start', command=create_path)
 start_button.pack()
 
-custom_button = Button(button_frame, width=15, height=5, text='place obstacles', command=lambda:custom(STATE_OBSTACLE))
+custom_button = Button(button_frame, width=15, height=5, text='set the obstacles', command=lambda:custom(STATE_OBSTACLE))
 custom_button.pack()
 
 root.mainloop()
