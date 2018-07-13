@@ -42,9 +42,13 @@ def refresh_map():
         x2, y2 = end
         grid.create_rectangle(x2*CELL_SIZE, y2*CELL_SIZE, (x2+1)*CELL_SIZE, (y2+1)*CELL_SIZE, fill='red')
 
+    root.update()
 
 def create_path():
     global CELL_SIZE, SIZE, current_state, start, end
+
+    if not start or not end:
+        get_random_positions()
     
     current_state = None
     start_button.config(state=DISABLED)
@@ -52,17 +56,10 @@ def create_path():
     information.config(text="click on the start button to create a path between 2 random positions")
     refresh_map()
 
-    if not start and not end:
-        get_random_positions()
-
     print("path between", start, end)
     x1, y1 = start
     x2, y2 = end
 
-    grid.create_rectangle(x1*CELL_SIZE, y1*CELL_SIZE, (x1+1)*CELL_SIZE, (y1+1)*CELL_SIZE, fill='green')
-    grid.create_rectangle(x2*CELL_SIZE, y2*CELL_SIZE, (x2+1)*CELL_SIZE, (y2+1)*CELL_SIZE, fill='red')
-    root.update()
-    
     path, debug = get_path(start, end, obstacles, SIZE)
     
     for cell in debug[1:]:
