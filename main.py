@@ -14,7 +14,6 @@ STATE_OBSTACLE = 0
 STATE_START = 1
 STATE_END = 2
 
-
 #  GLOBALS
 obstacles = []
 current_state = None
@@ -45,10 +44,11 @@ def refresh_map():
 
 
 def create_path():
-    global CELL_SIZE, SIZE, start, end
+    global CELL_SIZE, SIZE, current_state, start, end
     
-    startButton.config(state=DISABLED)
-    customButton.config(state=DISABLED)
+    current_state = None
+    start_button.config(state=DISABLED)
+    custom_button.config(state=DISABLED)
     refresh_map()
 
     if not start and not end:
@@ -81,8 +81,8 @@ def create_path():
         print("    length : no path")
         percentage = 0
     print("    {0} cells analyzed ({1}%)\n".format(len(debug), percentage))
-    startButton.config(state=NORMAL)
-    customButton.config(state=NORMAL)
+    start_button.config(state=NORMAL)
+    custom_button.config(state=NORMAL)
     start = None
     end = None
 
@@ -91,18 +91,18 @@ def custom(state):
     global obstacles, current_state
     
     if state == STATE_OBSTACLE:
-        startButton.config(state=DISABLED)
+        start_button.config(state=DISABLED)
         current_state = STATE_OBSTACLE
-        customButton.config(text="place start", command=lambda:custom(STATE_START))
+        custom_button.config(text="place start", command=lambda:custom(STATE_START))
         refresh_map()
         
     elif state == STATE_START:
         current_state = STATE_START
-        customButton.config(text="place end", command=lambda:custom(STATE_END))
+        custom_button.config(text="place end", command=lambda:custom(STATE_END))
         
     elif state == STATE_END:
         current_state = STATE_END
-        customButton.config(text="place obstacles", command=lambda:custom(STATE_OBSTACLE))
+        custom_button.config(text="place obstacles", command=lambda:custom(STATE_OBSTACLE))
     
 
 def click(event):
@@ -126,11 +126,12 @@ def click(event):
         if (x, y) not in obstacles and (x, y) != start:
             end = (x, y)
             refresh_map()
-            startButton.config(state=NORMAL)
+            start_button.config(state=NORMAL)
 
 
 def get_random_positions():
     global start, end
+    
     start = (random.randint(0, SIZE-1), random.randint(0, SIZE-1))
     while start in obstacles:
         start = (random.randint(0, SIZE-1), random.randint(0, SIZE-1))
@@ -140,7 +141,14 @@ def get_random_positions():
 
 
 root = Tk()
-grid = Canvas(root, width=SIZE*CELL_SIZE, height=SIZE*CELL_SIZE, bg='white')
+
+grid_frame = Frame(root)
+grid_frame.grid(row=0, column=0)
+
+button_frame = Frame(root)
+button_frame.grid(row=0, column=1)
+
+grid = Canvas(grid_frame, width=SIZE*CELL_SIZE, height=SIZE*CELL_SIZE, bg='white')
 grid.bind("<Button-1>", click)
 grid.pack()
 
@@ -153,10 +161,10 @@ for i in range(NUMBER_OF_OBSTACLES):
     obstacles.append((x, y))
     grid.create_rectangle(x*CELL_SIZE, y*CELL_SIZE, (x+1)*CELL_SIZE, (y+1)*CELL_SIZE, fill='black')
 
-startButton = Button(root, text='start', command=create_path)
-startButton.pack()
+start_button = Button(button_frame, width=15, height=5, text='start', command=create_path)
+start_button.pack()
 
-customButton = Button(root, text='place obstacles', command=lambda:custom(STATE_OBSTACLE))
-customButton.pack()
+custom_button = Button(button_frame, width=15, height=5, text='place obstacles', command=lambda:custom(STATE_OBSTACLE))
+custom_button.pack()
 
 root.mainloop()
