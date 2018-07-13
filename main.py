@@ -49,6 +49,7 @@ def create_path():
     current_state = None
     start_button.config(state=DISABLED)
     custom_button.config(state=DISABLED)
+    information.config(text="click on the start button to create a path between 2 random positions")
     refresh_map()
 
     if not start and not end:
@@ -93,15 +94,18 @@ def custom(state):
     if state == STATE_OBSTACLE:
         start_button.config(state=DISABLED)
         current_state = STATE_OBSTACLE
+        information.config(text="click on the grid to set/remove obstacles")
         custom_button.config(text="set the start", command=lambda:custom(STATE_START))
         refresh_map()
         
     elif state == STATE_START:
         current_state = STATE_START
+        information.config(text="click on the grid to place the start position")
         custom_button.config(text="set the end", command=lambda:custom(STATE_END))
         
     elif state == STATE_END:
         current_state = STATE_END
+        information.config(text="click on the grid to place the end position")
         custom_button.config(text="set the obstacles", command=lambda:custom(STATE_OBSTACLE))
     
 
@@ -142,11 +146,18 @@ def get_random_positions():
 
 root = Tk()
 
+information_frame = LabelFrame(root, text="Information", width=SIZE*CELL_SIZE, height=50)
+information_frame.propagate(False)
+information_frame.grid(row=0, column=0)
+
 grid_frame = Frame(root)
-grid_frame.grid(row=0, column=0)
+grid_frame.grid(row=1, column=0)
 
 button_frame = Frame(root)
-button_frame.grid(row=1, column=0)
+button_frame.grid(row=2, column=0)
+
+information = Label(information_frame, text="click on the start button to create a path between 2 random positions")
+information.pack(expand=True, fill=BOTH)
 
 grid = Canvas(grid_frame, width=SIZE*CELL_SIZE, height=SIZE*CELL_SIZE, bg='white')
 grid.bind("<Button-1>", click)
