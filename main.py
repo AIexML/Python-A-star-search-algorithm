@@ -44,15 +44,32 @@ def refresh_map():
 
     root.update()
 
+def get_random_positions():
+    global start, end
+    
+    start = (random.randint(0, SIZE-1), random.randint(0, SIZE-1))
+    while start in obstacles:
+        start = (random.randint(0, SIZE-1), random.randint(0, SIZE-1))
+    end = start
+    while end == start or end in obstacles:
+        end = (random.randint(0, SIZE-1), random.randint(0, SIZE-1))
+
 def create_path():
     global CELL_SIZE, SIZE, current_state, start, end
 
-    if not start or not end:
-        get_random_positions()
+    if not start:
+        start = (random.randint(0, SIZE-1), random.randint(0, SIZE-1))
+        while start == end or start in obstacles:
+            start = (random.randint(0, SIZE-1), random.randint(0, SIZE-1))
+            
+    if not end:
+        end = (random.randint(0, SIZE-1), random.randint(0, SIZE-1))
+        while start == end or end in obstacles:
+            end = (random.randint(0, SIZE-1), random.randint(0, SIZE-1))
     
     current_state = None
     start_button.config(state=DISABLED)
-    custom_button.config(state=DISABLED)
+    custom_button.config(state=DISABLED, text="set the obstacles", command=lambda:custom(STATE_OBSTACLE))
     information.config(text="click on the start button to create a path between 2 random positions")
     refresh_map()
 
@@ -89,7 +106,6 @@ def custom(state):
     global obstacles, current_state
     
     if state == STATE_OBSTACLE:
-        start_button.config(state=DISABLED)
         current_state = STATE_OBSTACLE
         information.config(text="click on the grid to set/remove obstacles")
         custom_button.config(text="set the start", command=lambda:custom(STATE_START))
@@ -127,18 +143,6 @@ def click(event):
         if (x, y) not in obstacles and (x, y) != start:
             end = (x, y)
             refresh_map()
-            start_button.config(state=NORMAL)
-
-
-def get_random_positions():
-    global start, end
-    
-    start = (random.randint(0, SIZE-1), random.randint(0, SIZE-1))
-    while start in obstacles:
-        start = (random.randint(0, SIZE-1), random.randint(0, SIZE-1))
-    end = start
-    while end == start or end in obstacles:
-        end = (random.randint(0, SIZE-1), random.randint(0, SIZE-1))
 
 
 root = Tk()
