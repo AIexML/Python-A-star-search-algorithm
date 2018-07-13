@@ -10,6 +10,10 @@ NUMBER_OF_OBSTACLES = 90
 SIZE = 16
 
 
+STATE_OBSTACLE = 0
+STATE_START = 1
+STATE_END = 2
+
 def refresh_map():
     global CELL_SIZE, SIZE
     grid.delete(ALL)
@@ -24,6 +28,7 @@ def refresh_map():
 def create_path():
     global CELL_SIZE, SIZE
     startButton.config(state=DISABLED)
+    customButton.config(state=DISABLED)
     refresh_map()
     pos1 = (random.randint(0, SIZE-1), random.randint(0, SIZE-1))
     while pos1 in OBSTACLES:
@@ -60,10 +65,38 @@ def create_path():
         percentage = 0
     print("    {0} cells analyzed ({1}%)\n".format(len(debug), percentage))
     startButton.config(state=NORMAL)
+    customButton.config(state=NORMAL)
 
+
+def custom(state):
+    global OBSTACLES, customInProgress
+    if state == STATE_OBSTACLE:
+        OBSTACLES = []
+        refresh_map()
+        customInProgress = True
+        print("place obstacles")
+    elif state == STATE_START:
+        pass
+    elif state == STATE_END:
+        pass
+    
+
+def click(event):
+    global OBSTACLES, customInProgress
+    if customInProgress:
+        x, y = event.x//CELL_SIZE, event.y//CELL_SIZE
+        if (x, y) in OBSTACLES:
+            OBSTACLES.remove((x, y))
+        else:
+            OBSTACLES.append((x, y))
+        refresh_map()
+    
+
+customInProgress = False
 
 root = Tk()
 grid = Canvas(root, width=SIZE*CELL_SIZE, height=SIZE*CELL_SIZE, bg='white')
+grid.bind("<Button-1>", click)
 grid.pack()
 OBSTACLES = []
 for x in range(SIZE):
@@ -77,4 +110,8 @@ for i in range(NUMBER_OF_OBSTACLES):
 
 startButton = Button(root, text='start', command=create_path)
 startButton.pack()
+
+customButton = Button(root, text='custom', command=lambda:custom(STATE_OBSTACLE))
+customButton.pack()
+
 root.mainloop()
