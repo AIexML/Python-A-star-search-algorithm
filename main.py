@@ -145,6 +145,7 @@ def get_random_positions():
 
 
 root = Tk()
+root.title("Python-A-star-search-algorithm")
 
 information_frame = LabelFrame(root, text="Information", width=SIZE*CELL_SIZE, height=50)
 information_frame.propagate(False)
